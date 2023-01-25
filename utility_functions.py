@@ -1,4 +1,3 @@
-from classes import Player
 from random import random
 
 def find_attributes_and_apply_weights(player, attribute_weight_dicts):
