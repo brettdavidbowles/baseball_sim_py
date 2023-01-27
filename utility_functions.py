@@ -1,5 +1,6 @@
 from random import random
 from constants import AT_BAT_OUTCOMES
+from classes import Player
 
 def find_attributes_and_apply_weights(player, attribute_weight_dicts):
   relevant_attribute_weighted_values = []
@@ -37,15 +38,15 @@ def random_pitch_count(is_strikeout, is_walk):
   }
 
 def run_bases(hit, runner, runners_on):
-  new_runners_on = runners_on.copy()
-  hit_index = AT_BAT_OUTCOMES['hit'].index(hit)
-  rbis = 0
   if hit in AT_BAT_OUTCOMES['out']:
     return {
       'rbis': 0,
       'new_runners_on': runners_on
     }
   else:
+    new_runners_on = runners_on.copy()
+    hit_index = AT_BAT_OUTCOMES['hit'].index(hit)
+    rbis = 0
     for index, runner_on in enumerate(new_runners_on):
       if runner_on and index <= hit_index:
         new_runners_on[index] = False
@@ -68,3 +69,20 @@ def find_next_batter_index(current_index):
     return 0
   else:
     return current_index + 1
+
+def create_random_pitcher_and_lineup(team_name):
+  lineup = []
+  for i in range(10):
+    lineup.append(Player(
+      i,
+      f'{team_name} Player {i}',
+      team_name,
+      random() * 100,
+      random() * 100,
+      random() * 100,
+      random() * 100,
+      random() * 100,
+      random() * 100,
+      random() * 100,
+    ))
+  return lineup
