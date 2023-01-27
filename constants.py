@@ -37,3 +37,9 @@ SLUGGING_PERCENTAGE_ATTRIBUTES = [
     'weight': 1
   }
 ]
+
+AT_BAT_OUTCOMES = {
+  'hit': ( 'single', 'double', 'triple', 'homerun' ),
+  'out': ( 'strikeout', 'fieldout' ),
+  'neither_hit_nor_out': ( 'walk', 'hit_by_pitch' )
+}

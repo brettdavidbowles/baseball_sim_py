@@ -1,19 +1,20 @@
 from classes import Player
 from constants import BATTING_AVERAGE_ATTRIBUTES, WHIP_ATTRIBUTES, SLUGGING_PERCENTAGE_ATTRIBUTES
-from utility_functions import find_attributes_and_apply_weights, random_pitch_count
+from utility_functions import find_attributes_and_apply_weights, random_pitch_count, run_bases
 from random import random
+from operator import itemgetter
 
 brett = Player(1, 'Brett', 'Red Sox', 50, 50, 50, 50, 50, 50, 5)
 
-def atBat(batter, pitcher, atBats, runnersOn):
+def at_bat(batter, pitcher, runners_on):
   random = random()
   # fix all of this shit, just translating to python right now
   batter_advantage = find_attributes_and_apply_weights(batter, BATTING_AVERAGE_ATTRIBUTES)
   pitcher_advantage = find_attributes_and_apply_weights(pitcher, WHIP_ATTRIBUTES)
-  # need pitcher fatique function
+  # need pitcher fatique function, add at_bats as parameter
   hit_calculation = random - batter_advantage + pitcher_advantage
   if hit_calculation < .2:
-    pitch_count = random_pitch_count(False, False)
+    strikes, balls = itemgetter('strikes', 'balls')(random_pitch_count(False, False))
     slugging_random = random()
     slugging_probability = slugging_random * find_attributes_and_apply_weights(batter, SLUGGING_PERCENTAGE_ATTRIBUTES)
     if slugging_probability > .8:
@@ -25,9 +26,15 @@ def atBat(batter, pitcher, atBats, runnersOn):
     else:
       outcome = 'single'
   else:
-    pitch_count = random_pitch_count(True, False)
+    strikes, balls = itemgetter('strikes', 'balls')(random_pitch_count(True, False))
     outcome = 'strikeout'
-  if outcome != 'strikeout':
-    newRunnersOn =
-    # this is where i left off, need to add base running function next
-print(find_attributes_and_apply_weights(brett, BATTING_AVERAGE_ATTRIBUTES))
+  new_runners_on, rbis = itemgetter('new_runners_on', 'rbis')(run_bases(outcome, batter, runners_on))
+  return {
+    'outcome': outcome,
+    'strikes': strikes,
+    'balls': balls,
+    'new_runners_on': new_runners_on,
+    'rbis': rbis,
+    'batter_id': batter.id,
+    'pitcher_id': pitcher.id
+  }
